@@ -15,12 +15,13 @@ const HeroCursor = ({ text, subtitle, heroRef, onClick }: Props) => {
 
     const mouseMove = (e: MouseEvent) => {
         setCursorShow(true);
-        setPositon({ top: `${e.clientY}px`, left: `${e.clientX}px` });
+        setPositon({ top: `${e.pageY}px`, left: `${e.pageX}px` });
     };
 
     const mouseLeave = () => {
         setCursorShow(false);
         setPositon({ left: "50%", top: "50%" });
+        
     };
 
     useEffect(() => {
@@ -36,7 +37,7 @@ const HeroCursor = ({ text, subtitle, heroRef, onClick }: Props) => {
     return (
         <div
             ref={cursorRef}
-            className={`absolute -translate-x-1/2 -translate-y-[40%] w-32 flex justify-center items-center flex-col text-center gap-4 font-bold text-sm cursor-none transition-opacity duration-300 uppercase ${
+            className={`absolute z-10 -translate-x-1/2 -translate-y-[40%] w-32 flex justify-center items-center flex-col text-center gap-4 font-bold text-sm cursor-none transition-opacity duration-300 uppercase ${
                 cursorShow ? "" : "transition-all"
             }`}
             style={{
