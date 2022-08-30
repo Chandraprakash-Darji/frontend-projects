@@ -6,4 +6,4 @@ export { default as Hero } from "./Hero";
 export { default as InternalWorks } from "./InternalWorks";
 export { default as Nav } from "./Nav";
 export { default as Work } from "./Work";
-export { default as HeroCursor } from "./HeroCursor";
+export { default as HeroCursor } from "./Hero/HeroCursor";
