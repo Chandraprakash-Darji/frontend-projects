@@ -18,3 +18,14 @@
         aspect-ratio: auto;
     }
 }
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #00000080;
+}
+::-webkit-scrollbar-track {
+    background-color: #00000090;
+}
