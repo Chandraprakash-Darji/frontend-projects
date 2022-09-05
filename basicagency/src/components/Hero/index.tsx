@@ -1,11 +1,44 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeroCursor } from "..";
 const Hero = () => {
     const hero = useRef<HTMLDivElement>(null);
+    const timeLineRef = useRef<HTMLSpanElement>(null);
     const [fullScreen, setFullScreen] = useState(false);
     const [duration, setDuration] = useState("0 / 0");
-    const [progress, setProgress] = useState(0);
+    const [progress, setProgress] = useState(20);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const mouseDown = () => {
+        console.log("down");
+        setIsDragging(true);
+    };
+    const mouseUp = () => {
+        console.log("up");
+        setIsDragging(false);
+    };
+    const mouseMove = (e: MouseEvent) => {
+        console.log("move");
+        if (isDragging) {
+            console.log((e.pageX / window.innerWidth) * 100);
+            setProgress((e.pageX / window.innerWidth) * 100);
+        }
+    };
+
+    useEffect(() => {
+        if (timeLineRef) {
+            console.log("init", timeLineRef.current);
+            timeLineRef.current?.addEventListener("mousedown", mouseDown);
+            timeLineRef.current?.addEventListener("mouseup", mouseUp);
+            timeLineRef.current?.addEventListener("mousemove", mouseMove);
+        }
+        return () => {
+            timeLineRef.current?.removeEventListener("mousedown", mouseDown);
+            timeLineRef.current?.removeEventListener("mouseup", mouseUp);
+            timeLineRef.current?.removeEventListener("mousemove", mouseMove);
+            // setProgress(0);
+        };
+    }, []);
 
     return (
         <div
@@ -49,23 +82,28 @@ const Hero = () => {
                                     100
                                 ).toFixed(2)}`
                             );
-                            setProgress(
-                                ((e.target as HTMLVideoElement).currentTime /
-                                    (e.target as HTMLVideoElement).duration) *
-                                    100
-                            );
+                            //  setProgress(
+                            //     ((e.target as HTMLVideoElement).currentTime /
+                            //         (e.target as HTMLVideoElement).duration) *
+                            //         100
+                            // );
                         }}
                     >
                         <source src="/intro-video.mp4" type="video/mp4" />
                         Your browser does not support the video tag.
                     </video>
-                    <div className="h-20 w-screen bottom-0 left-0 absolute">
+                    <div className="h-12 w-screen bottom-0 left-0 absolute select-none">
                         <span
-                            className="absolute transition-all text-light ease-linear w-24 flex justify-start items-center top-2"
+                            ref={timeLineRef}
+                            className={`relative transition-all duration-300 text-light ease-linear flex justify-end items-center whitespace-nowrap ${
+                                isDragging ? "cursor-grabbing" : "cursor-grab"
+                            }`}
                             style={{
-                                transform: `translateX(${progress}%)`,
+                                width: `${progress}%`,
                             }}
-                        ></span>
+                        >
+                            {duration}
+                        </span>
                     </div>
                 </div>
             )}
